@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Obsidian Private Aviation</title>
+  <meta name="description" content="Fictional long-range private aviation: the fleet, charter, ownership and enquiries, flown through night cloud." />
+  <meta name="theme-color" content="#08090b" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preload" as="image" href="media/wide.webp" />
+  <link rel="stylesheet" href="jet.css" />
+  <link rel="stylesheet" href="sections.css" />
+  <link rel="stylesheet" href="fonts.css" />
+  <link rel="stylesheet" href="contact.css" />
+  <script type="importmap">
+  { "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+  } }
+  </script>
+</head>
+<body>
+  <a class="skip" href="#aircraft">Skip to the fleet</a>
+
+  <div class="loader" id="loader" role="status" aria-live="polite">
+    <div class="loader__mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2 21 12 12 22 3 12Z" /></svg></div>
+    <p class="loader__name">Obsidian</p>
+    <div class="loader__bar"><span id="loaderBar"></span></div>
+    <p class="loader__note">Preparing your flight</p>
+  </div>
+
+  <header class="nav" id="nav">
+    <a class="brand" href="#top" aria-label="Obsidian, back to top">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 21 12 12 22 3 12Z" /></svg>
+      <span>Obsidian</span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#aircraft">Aircraft</a>
+      <a href="#charter">Charter</a>
+      <a href="#ownership">Ownership</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="nav__cta" href="#contact">Enquire</a>
+  </header>
+
+  <!-- ============================================================ hero -->
+  <section class="hero" id="top" aria-roledescription="carousel" aria-label="The Obsidian jet, five camera views">
+    <div class="stage" aria-hidden="true">
+      <div class="rig" id="rig">
+        <div class="plate"><img src="media/wide.webp" alt="" decoding="async" /></div>
+        <div class="plate"><img src="media/front.webp" alt="" decoding="async" /></div>
+      </div>
+      <canvas id="sky"></canvas>
+      <div class="shade"></div>
+      <div class="grain"></div>
+    </div>
+
+    <div class="cap cap--intro" data-stop="0" data-pos="bl">
+      <p class="cap__k">Obsidian &middot; Private Aviation</p>
+      <h1>Fly above<br /><em>the noise.</em></h1>
+      <p class="cap__p">A long-range private jet shaped around silence, speed and the people on board.</p>
+      <div class="cap__actions">
+        <button class="btn" id="explore" type="button">Explore the Jet <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3.5 8.5 8 13l4.5-4.5" /></svg></button>
+        <a class="link" href="#charter">Charter enquiry</a>
+      </div>
+    </div>
+
+    <div class="cap" data-stop="1" data-pos="bl">
+      <p class="cap__k">01 &mdash; Presence</p>
+      <h2>Obsidian black.<br />Chrome-ringed engines.</h2>
+      <p class="cap__p">It makes an entrance before it lands.</p>
+    </div>
+
+    <div class="cap" data-stop="2" data-pos="bl">
+      <p class="cap__k">02 &mdash; Silhouette</p>
+      <h2>One clean line,<br />nose to tail.</h2>
+      <p class="cap__p">Long range, low noise, room for the whole party.</p>
+    </div>
+
+    <div class="cap" data-stop="3" data-pos="br">
+      <p class="cap__k">03 &mdash; Cabin</p>
+      <h2>Fourteen windows<br />of warm light.</h2>
+      <p class="cap__p">A low cabin altitude, so you land rested.</p>
+    </div>
+
+    <div class="cap" data-stop="4" data-pos="bl">
+      <p class="cap__k">04 &mdash; Power</p>
+      <h2>Rear-mounted,<br />so the cabin stays quiet.</h2>
+      <a class="btn btn--ghost" href="#aircraft">Meet the fleet</a>
+    </div>
+
+    <ol class="progress" id="progress" aria-label="Camera views"></ol>
+
+    <div class="hint" id="hint" aria-hidden="true"><span></span><b>Scroll</b></div>
+    <p class="sr-only" id="announce" aria-live="polite"></p>
+  </section>
+
+  <main id="main">
+    <!-- ====================================================== aircraft -->
+    <section class="fleet" id="aircraft" aria-labelledby="fleet-title">
+      <div class="fleet__pin">
+        <div class="fleet__head">
+          <p class="eyebrow">The fleet</p>
+          <h2 id="fleet-title" class="display">Five aircraft.<br /><em>One standard.</em></h2>
+          <ol class="fleet__count" aria-hidden="true"></ol>
+        </div>
+        <div class="fleet__reel" role="list"></div>
+        <div class="fleet__desc" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================= charter -->
+    <section class="charter" id="charter" aria-labelledby="charter-title">
+      <div class="charter__stage">
+        <div class="charter__frame">
+          <video class="charter__video" data-src="media/video/charter.mp4" poster="media/video/charter.jpg" muted loop playsinline preload="none" aria-hidden="true"></video>
+          <div class="charter__veil"></div>
+          <div class="charter__copy">
+            <p class="eyebrow">Charter</p>
+            <h2 id="charter-title" class="display"><span class="mask"><span>Wheels up in hours,</span></span><span class="mask"><span><em>not days.</em></span></span></h2>
+            <p class="lede">Tell us where and when. We find the aircraft and crew, plan the route and have the cabin ready before you arrive.</p>
+            <a class="btn" href="#contact" data-interest="Charter">Request a Flight <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5" /></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="charter__more">
+        <ul class="benefits">
+          <li><span class="benefits__n">01</span><div><h3>Door to stairs in minutes</h3><p>Private terminals, no queues, your car brought to the aircraft.</p></div></li>
+          <li><span class="benefits__n">02</span><div><h3>A crew who knows your name</h3><p>The same small team flies you whenever their schedule allows.</p></div></li>
+          <li><span class="benefits__n">03</span><div><h3>Routes the airlines don't fly</h3><p>Smaller airfields put you closer to where you are actually going.</p></div></li>
+          <li><span class="benefits__n">04</span><div><h3>The cabin set your way</h3><p>Catering, seating, sleep and work arranged before departure.</p></div></li>
+          <li><span class="benefits__n">05</span><div><h3>One call, any change</h3><p>A concierge handles new times, new guests and new destinations.</p></div></li>
+        </ul>
+        <div class="topview" aria-hidden="true">
+          <div class="topview__clouds"></div>
+          <canvas id="topview"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== ownership -->
+    <section class="own" id="ownership" aria-labelledby="own-title">
+      <div class="own__pin">
+        <div class="own__main">
+          <div class="own__head">
+            <p class="eyebrow">Ownership</p>
+            <div class="own__titles" id="own-title" aria-live="polite"></div>
+            <div class="own__meter">
+              <p class="own__counter" aria-hidden="true"><b>01</b><span>/ 06</span></p>
+              <div class="own__rail" aria-hidden="true"><i></i></div>
+            </div>
+          </div>
+          <a class="btn own__cta" href="#contact" data-interest="Ownership">Discuss Ownership <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5" /></svg></a>
+          <div class="own__stage" tabindex="0" role="group" aria-roledescription="carousel" aria-label="Ownership stories — use the arrow keys or scroll">
+            <div class="own__track"></div>
+          </div>
+        </div>
+        <ul class="own__models own__models--pin" aria-label="Ways to own"></ul>
+      </div>
+    </section>
+    <ul class="own__models own__models--flow" aria-label="Ways to own"></ul>
+
+    <!-- ======================================================= contact -->
+    <section class="contact" id="contact" aria-labelledby="contact-title">
+      <img class="contact__bg" src="media/video/charter.jpg" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+      <canvas class="contact__sky" aria-hidden="true"></canvas>
+      <div class="contact__inner">
+        <div class="contact__intro">
+          <p class="eyebrow rv" style="--i:0">Contact</p>
+          <h2 id="contact-title" class="display rv" style="--i:1">Your next chapter<br /><em>begins above.</em></h2>
+          <p class="lede rv" style="--i:2">Tell us a little about the trip or the aircraft you have in mind. A member of the concierge team will reply personally.</p>
+          <ol class="route rv" style="--i:3" aria-label="What happens next">
+            <li><b>Send your request</b><span>Charter, ownership or a general question: a few lines is enough.</span></li>
+            <li><b>A concierge reads it</b><span>Your request goes to a person on the team, not an automated queue.</span></li>
+            <li><b>You hear back</b><span>A personal reply within one business day.</span></li>
+          </ol>
+        </div>
+        <div class="contact__card rv" style="--i:2">
+          <div class="pass" id="pass">
+            <div class="pass__head">
+              <p class="pass__title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l1.2 6.6L21.5 14v1.6l-8.3-2-.4 5.4 2.2 1.6V22L12 21.2 9 22v-1.4l2.2-1.6-.4-5.4-8.3 2V14l8.3-4.9z" /></svg><span class="pass__state">Flight request</span></p>
+              <p class="pass__kind"><span>Service</span><b id="pass-kind">Not yet chosen</b></p>
+            </div>
+            <div class="pass__perf" aria-hidden="true"></div>
+            <div class="pass__stage">
+              <form class="form pass__form" id="enquiry" novalidate>
+                <div class="field">
+                  <label for="f-name">Name</label>
+                  <input id="f-name" name="name" type="text" autocomplete="name" required minlength="2" maxlength="120" aria-describedby="e-name" />
+                  <p class="field__err" id="e-name"></p>
+                </div>
+                <div class="field">
+                  <label for="f-email">Email</label>
+                  <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="200" aria-describedby="e-email" />
+                  <p class="field__err" id="e-email"></p>
+                </div>
+                <fieldset class="field field--choice" aria-describedby="e-interest">
+                  <legend>I'm interested in</legend>
+                  <div class="choices">
+                    <label><input type="radio" name="interest" value="Charter" required /><span>Charter</span></label>
+                    <label><input type="radio" name="interest" value="Ownership" /><span>Ownership</span></label>
+                    <label><input type="radio" name="interest" value="General Inquiry" /><span>General Inquiry</span></label>
+                  </div>
+                  <p class="field__err" id="e-interest"></p>
+                </fieldset>
+                <div class="field field--wide">
+                  <label for="f-message">Your message</label>
+                  <p class="field__hint" id="h-message">Choose a service above and we will suggest what to include.</p>
+                  <textarea id="f-message" name="message" rows="4" required minlength="10" maxlength="4000" placeholder="Tell us a little about the trip or the aircraft you have in mind." aria-describedby="h-message e-message"></textarea>
+                  <p class="field__err" id="e-message"></p>
+                </div>
+                <div class="hp" aria-hidden="true"><label for="f-company">Company</label><input id="f-company" name="company" type="text" tabindex="-1" autocomplete="off" /></div>
+                <div class="form__foot">
+                  <button class="btn" type="submit"><span class="btn__label">Send request</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5" /></svg></button>
+                  <p class="form__status" role="status" aria-live="polite"></p>
+                </div>
+              </form>
+              <div class="pass__done" id="pass-done" inert>
+                <svg class="seal" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="21" /><path d="M15 25l7 7 12-15" /></svg>
+                <p class="eyebrow">Request received</p>
+                <h3 class="pass__thanks" id="pass-thanks" tabindex="-1" role="status">Thank you.</h3>
+                <p class="pass__note">Your request has reached the concierge team. A member of the team will reply personally, usually within one business day.</p>
+                <dl class="pass__sum">
+                  <div><dt>Service</dt><dd id="done-kind"></dd></div>
+                  <div><dt>Reply to</dt><dd id="done-email"></dd></div>
+                </dl>
+                <button class="btn btn--ghost pass__again" type="button" id="pass-again">Send another request</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ======================================================== footer -->
+  <footer class="foot">
+    <div class="foot__top">
+      <a class="brand" href="#top" aria-label="Obsidian, back to top">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 21 12 12 22 3 12Z" /></svg>
+        <span>Obsidian</span>
+      </a>
+      <nav class="foot__nav" aria-label="Footer">
+        <a href="#aircraft">Aircraft</a>
+        <a href="#charter">Charter</a>
+        <a href="#ownership">Ownership</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="foot__actions">
+        <button class="ctl" data-sound type="button" aria-pressed="false">
+          <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="ctl__label">Sound off</span>
+        </button>
+        <div class="fp" data-font-picker></div>
+        <a class="totop" href="#top">Back to top <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5" /></svg></a>
+      </div>
+    </div>
+    <div class="foot__base">
+      <p>&copy; 2026 Obsidian Private Aviation. A fictional brand; aircraft shown are design concepts.</p>
+      <p>Enquiries through the form above.</p>
+    </div>
+  </footer>
+
+  <dialog class="detail" id="detail" aria-labelledby="detail-title">
+    <div class="detail__media"><video muted loop playsinline aria-hidden="true"></video></div>
+    <div class="detail__body">
+      <p class="eyebrow" id="detail-k"></p>
+      <h2 id="detail-title" class="display"></h2>
+      <p class="detail__finish"></p>
+      <p class="lede" id="detail-text"></p>
+      <ul class="detail__points"></ul>
+      <a class="btn" href="#contact" data-interest="Ownership" data-close>Enquire about this aircraft</a>
+    </div>
+    <button class="detail__close" type="button" data-close aria-label="Close">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" /></svg>
+    </button>
+  </dialog>
+
+  <script src="jet.js"></script>
+  <script type="module" src="site.js"></script>
+  <script type="module" src="fonts.js"></script>
+</body>
+</html>

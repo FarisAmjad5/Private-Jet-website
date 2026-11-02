@@ -1,0 +1,92 @@
+/* OBSIDIAN — typeface picker + display-type tweaks. Loaded after jet.css / sections.css. */
+
+/* Display faces differ in size and weight. fonts.js sets --display-scale / --display-tracking on <html>
+   (unset = Instrument Serif, untouched). zoom scales whatever clamp() each heading already uses. */
+.cap h1,
+.cap h2,
+.display,
+.fdesc h3,
+.benefits h3,
+.specs dd { zoom: var(--display-scale, 1); }
+.cap h1,
+.cap h2,
+.display { letter-spacing: var(--display-tracking, -0.01em); }
+.fdesc h3,
+.benefits h3,
+.specs dd { letter-spacing: var(--display-tracking, normal); }
+
+/* ------------------------------------------------------------ picker */
+.fp { position: relative; }
+
+/* The trigger is a footer .ctl (see jet.css); only the glyph and the open state are added here. */
+.fp__glyph { font-family: var(--serif); font-size: 16px; letter-spacing: 0; text-transform: none; line-height: 1; }
+.fp__btn[aria-expanded='true'] { color: var(--paper); }
+.fp.is-busy .fp__glyph { animation: fp-pulse 0.9s ease-in-out infinite; }
+@keyframes fp-pulse { 50% { opacity: 0.35; } }
+
+.fp__panel {
+  position: absolute;
+  left: 0; /* fonts.js nudges this so the panel stays inside the viewport */
+  bottom: calc(100% + 12px);
+  width: min(320px, calc(100vw - 2 * var(--gutter)));
+  max-height: calc(100svh - 150px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(236, 235, 230, 0.12);
+  background: rgba(10, 11, 14, 0.8);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transform-origin: bottom center;
+  transition: opacity 0.2s var(--ease), transform 0.25s var(--ease), visibility 0s linear 0.2s;
+}
+/* Visible at once on open (so focus can land), hidden only after the fade on close. */
+.fp.is-open .fp__panel { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+
+.fp__title { margin: 4px 8px 8px; font-size: 11px; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: var(--faint); }
+
+.fp__opt {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  padding: 11px 36px 11px 14px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  text-align: left;
+  transition: background 0.25s, border-color 0.25s;
+}
+.fp__opt::after {
+  content: '';
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  border: 1px solid var(--faint);
+  transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+.fp__opt:hover,
+.fp__opt:focus-visible { background: rgba(236, 235, 230, 0.05); }
+.fp__opt:focus-visible { outline: 1px solid var(--amber); outline-offset: -1px; }
+.fp__opt[aria-checked='true'] { border-color: rgba(220, 170, 104, 0.4); background: rgba(220, 170, 104, 0.06); }
+.fp__opt[aria-checked='true']::after { background: var(--amber); border-color: var(--amber); box-shadow: 0 0 10px rgba(220, 170, 104, 0.6); }
+.fp__sample { font-size: 22px; line-height: 1.1; color: var(--paper); }
+.fp__sample em { font-style: italic; color: #f3dcb8; }
+.fp__name { font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); }
+
+.rm .fp__panel,
+.rm .fp__opt,
+.rm .fp__opt::after { transition: none; }
+.rm .fp.is-busy .fp__glyph { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .fp__panel, .fp__opt, .fp__opt::after { transition: none; }
+  .fp.is-busy .fp__glyph { animation: none; }
+}

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OBSIDIAN Render Studio</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; background: #08090b; color: #ecebe6; font: 13px/1.5 ui-monospace, Menlo, Consolas, monospace; }
+  header { padding: 12px 16px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; border-bottom: 1px solid #25272b; }
+  main { padding: 16px; }
+  canvas { max-width: 100%; height: auto; display: block; background: #000; }
+  #status { color: #dcaa68; white-space: pre-wrap; }
+  a { color: #dcaa68; }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<header>
+  <strong>OBSIDIAN · Render Studio</strong>
+  <span>Preview: <code>?view=&lt;shot&gt;&amp;t=0.25</code></span>
+  <span>Run (needs <code>node server.js --capture</code>): <a href="?job=all">all</a> · <a href="?job=cards">cards</a> · <a href="?job=own">own</a> · <a href="?job=feature">feature</a> · <code>&amp;only=a,b</code></span>
+</header>
+<main>
+  <div id="status">Loading…</div>
+  <div id="out"></div>
+</main>
+<script type="module">
+import { createStage } from '../../studio/lib.js';
+import { SHOTS } from './shots.js';
+
+const q = new URLSearchParams(location.search);
+const $status = document.getElementById('status');
+const $out = document.getElementById('out');
+const state = (window.__studio = { done: false, error: null, log: [] });
+const log = (m) => { state.log.push(m); $status.textContent = state.log.slice(-14).join('\n'); };
+
+async function save(stage, path, quality = 0.92) {
+  const blob = await stage.blob('image/jpeg', quality);
+  const r = await fetch('/__capture?f=' + encodeURIComponent(path), { method: 'POST', body: blob });
+  if (!r.ok) throw new Error(`capture failed ${r.status} for ${path} — is the server running with --capture?`);
+}
+
+function make(def, ss) {
+  const stage = createStage({ width: def.w, height: def.h, ss, ...def.stage });
+  return { stage, sc: def.build(stage) };
+}
+
+// Frame i renders phase i/N, so frame N would equal frame 0: the encoded clip loops without a seam.
+async function renderLoop(name, def) {
+  const { stage, sc } = make(def, def.ss ?? 1.5);
+  const N = Math.round(def.seconds * 24);
+  const t0 = performance.now();
+  for (let i = 0; i < N; i++) {
+    sc.update(i / N);
+    stage.render(sc.scene, sc.camera, i / 24);
+    await save(stage, `media/jet-render/${name}/${String(i + 1).padStart(4, '0')}.jpg`);
+    if (i % 24 === 0) log(`${name}: ${i + 1}/${N}  (${((performance.now() - t0) / (i + 1)).toFixed(0)} ms/frame)`);
+  }
+  stage.dispose();
+  log(`${name} ✓`);
+}
+
+async function main() {
+  const job = q.get('job');
+  if (job === 'preview') {
+    // One still per shot into media/_preview/, for a quick look before a full render.
+    const t = Number(q.get('t') || 0.3);
+    for (const [name, def] of Object.entries(SHOTS)) {
+      const { stage, sc } = make(def, 1);
+      sc.update(t);
+      stage.render(sc.scene, sc.camera, 0);
+      await save(stage, `media/_preview/${name}.jpg`, 0.85);
+      stage.dispose();
+      log(`preview ${name} ✓`);
+    }
+    log('ALL DONE');
+    state.done = true;
+    return;
+  }
+  if (job) {
+    const only = q.get('only') ? q.get('only').split(',') : null;
+    const groups = job === 'all' ? ['cards', 'own', 'feature'] : job.split(',');
+    for (const [name, def] of Object.entries(SHOTS)) {
+      if (!groups.includes(def.group) || (only && !only.includes(name))) continue;
+      await renderLoop(name, def);
+    }
+    log('ALL DONE');
+    state.done = true;
+    return;
+  }
+  const name = q.get('view') || 'umbra';
+  if (q.has('bare')) { document.querySelector('header').remove(); $status.remove(); document.querySelector('main').style.padding = '0'; }
+  const def = SHOTS[name];
+  const t0 = performance.now();
+  const { stage, sc } = make(def, Number(q.get('ss') || 1));
+  sc.update(Number(q.get('t') || 0));
+  stage.render(sc.scene, sc.camera, 0);
+  state.stage = stage; state.sc = sc;
+  $out.appendChild(stage.canvas);
+  if (q.get('save')) await save(stage, `media/_preview/${q.get('save')}.jpg`, 0.85);
+  log(`${name} t=${q.get('t') || 0} rendered in ${(performance.now() - t0).toFixed(0)} ms`);
+  state.done = true;
+}
+main().catch((e) => { state.error = String(e.stack || e); log('ERROR ' + state.error); console.error(e); });
+</script>
+</body>
+</html>

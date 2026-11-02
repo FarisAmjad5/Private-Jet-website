@@ -1,0 +1,227 @@
+/* OBSIDIAN — contact: a dusk horizon behind a "flight request" pass */
+
+.contact { position: relative; padding: clamp(100px, 16vh, 180px) var(--gutter); overflow: hidden; isolation: isolate; }
+
+/* atmosphere: the charter still sits deep behind drifting cloud, darkened toward the headline */
+.contact__bg {
+  position: absolute;
+  inset: -4% auto auto 0;
+  width: 120%;
+  max-width: none;
+  height: 108%;
+  z-index: -3;
+  object-fit: cover;
+  object-position: 6% 58%;
+  opacity: 0.85;
+  filter: saturate(0.95) contrast(1.05);
+  transform-origin: 0% 55%;
+  animation: contact-drift 48s ease-in-out infinite alternate;
+}
+.contact__sky { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; }
+.contact::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(to right, rgba(6, 7, 9, 0.94) 0%, rgba(6, 7, 9, 0.74) 36%, rgba(6, 7, 9, 0.32) 62%, rgba(6, 7, 9, 0.1) 100%),
+    radial-gradient(70% 55% at 78% 62%, rgba(220, 170, 104, 0.1), transparent 70%);
+}
+.contact::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to bottom, var(--ink), transparent 24%, transparent 76%, var(--ink)); pointer-events: none; }
+@keyframes contact-drift { from { transform: scale(1.02) translate3d(0, 0, 0); } to { transform: scale(1.1) translate3d(-1.5%, -1%, 0); } }
+
+.contact__inner { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr); gap: clamp(40px, 6vw, 110px); max-width: 1320px; margin: 0 auto; align-items: center; }
+.contact__intro { min-width: 0; }
+.contact__intro .display { font-size: clamp(2.9rem, 5.9vw, 6rem); line-height: 0.96; }
+.contact__intro .lede { max-width: 30rem; }
+
+/* what happens next: a quiet flight path */
+.route { list-style: none; margin: clamp(30px, 5vh, 52px) 0 0; padding: 0; max-width: 30rem; }
+.route li { position: relative; display: grid; gap: 4px; padding: 0 0 22px 34px; }
+.route li:last-child { padding-bottom: 0; }
+.route li::before { content: ''; position: absolute; left: 4px; top: 7px; width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--amber); background: var(--ink); }
+.route li:last-child::before { background: var(--amber); box-shadow: 0 0 14px rgba(220, 170, 104, 0.55); }
+.route li::after { content: ''; position: absolute; left: 8.5px; top: 22px; bottom: 6px; border-left: 1px dashed rgba(236, 235, 230, 0.28); }
+.route li:last-child::after { display: none; }
+.route b { font-size: 12px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--paper); }
+.route span { font-size: 14.5px; line-height: 1.55; color: var(--mute); }
+
+/* reveal on enter (class added by script, so the section stays visible without it) */
+.contact.reveal-ready .rv { opacity: 0; transform: translateY(20px); }
+.contact.is-in .rv { opacity: 1; transform: none; transition: opacity 1s var(--ease), transform 1.1s var(--ease); transition-delay: calc(var(--i, 0) * 110ms); }
+
+/* ------------------------------------------------------------- the pass */
+.contact__card { position: relative; min-width: 0; max-width: 640px; width: 100%; justify-self: end; }
+.contact__card::before { content: ''; position: absolute; inset: 8% 2% -6%; z-index: -1; background: rgba(0, 0, 0, 0.6); filter: blur(56px); border-radius: 40px; }
+.pass {
+  --head: 64px;
+  --notch: 11px;
+  --pad: clamp(22px, 3.2vw, 40px);
+  --edge: 0.8;
+  --mx: 18%;
+  --my: 0%;
+  position: relative;
+  border-radius: 24px;
+  background: linear-gradient(165deg, rgba(24, 26, 31, 0.6), rgba(9, 10, 13, 0.56) 60%);
+  backdrop-filter: blur(20px) saturate(1.1);
+  -webkit-backdrop-filter: blur(20px) saturate(1.1);
+  -webkit-mask: radial-gradient(circle var(--notch) at 0 var(--head), #0000 calc(100% - 0.6px), #000 100%), radial-gradient(circle var(--notch) at 100% var(--head), #0000 calc(100% - 0.6px), #000 100%);
+  -webkit-mask-composite: source-in;
+  mask: radial-gradient(circle var(--notch) at 0 var(--head), #0000 calc(100% - 0.6px), #000 100%), radial-gradient(circle var(--notch) at 100% var(--head), #0000 calc(100% - 0.6px), #000 100%);
+  mask-composite: intersect;
+}
+/* metallic edge: a 1px brushed-steel rim with an amber glint that follows the pointer */
+.pass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: var(--edge);
+  transition: opacity 0.8s var(--ease);
+  background:
+    radial-gradient(260px circle at var(--mx) var(--my), rgba(255, 226, 176, 0.9), transparent 70%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.34), rgba(236, 235, 230, 0.08) 24%, rgba(220, 170, 104, 0.34) 52%, rgba(236, 235, 230, 0.07) 76%, rgba(255, 255, 255, 0.22));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+.pass.is-sent { --edge: 1; }
+
+.pass__head { height: var(--head); display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 var(--pad); }
+.pass__title,
+.pass__kind { margin: 0; display: flex; align-items: center; gap: 12px; font-size: 11px; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; white-space: nowrap; }
+.pass__title svg { width: 18px; height: 18px; fill: none; stroke: var(--amber); stroke-width: 1.2; stroke-linejoin: round; transform: rotate(45deg); flex: none; }
+.pass__kind { gap: 10px; color: var(--faint); min-width: 0; }
+.pass__kind b { color: var(--amber); font-weight: 600; overflow: hidden; text-overflow: ellipsis; transition: opacity 0.4s; }
+.pass__perf { position: absolute; left: calc(var(--notch) + 10px); right: calc(var(--notch) + 10px); top: var(--head); border-top: 1px dashed rgba(236, 235, 230, 0.26); pointer-events: none; }
+
+.pass__stage { display: grid; }
+.pass__stage > * { grid-area: 1 / 1; min-width: 0; transition: opacity 0.6s var(--ease), transform 0.9s var(--ease), visibility 0s linear 0.6s; }
+.pass__form { transition: opacity 0.7s var(--ease) 0.15s, transform 0.9s var(--ease) 0.15s, visibility 0s; }
+.pass.is-sent .pass__form { opacity: 0; visibility: hidden; transform: translateY(-12px); transition: opacity 0.6s var(--ease), transform 0.9s var(--ease), visibility 0s linear 0.6s; }
+.pass__done { opacity: 0; visibility: hidden; transform: translateY(16px); }
+.pass.is-sent .pass__done { opacity: 1; visibility: visible; transform: none; transition: opacity 0.9s var(--ease) 0.3s, transform 1s var(--ease) 0.3s, visibility 0s; }
+
+/* ------------------------------------------------------------- the form */
+.form { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 28px; padding: clamp(24px, 3vw, 34px) var(--pad) clamp(26px, 3.2vw, 38px); }
+.field { display: grid; gap: 8px; margin: 0; padding: 0; border: 0; min-width: 0; align-content: start; }
+.field--choice,
+.field--wide,
+.form__foot { grid-column: 1 / -1; }
+.field label,
+.field legend { font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mute); padding: 0; }
+.field__hint { margin: -2px 0 0; font-size: 13.5px; line-height: 1.5; color: var(--faint); min-height: 2.9em; transition: color 0.4s; }
+.field__hint.is-live { color: rgba(220, 170, 104, 0.9); }
+.field input[type='text'],
+.field input[type='email'],
+.field textarea {
+  width: 100%;
+  min-height: 48px;
+  font: inherit;
+  font-size: 16px;
+  color: var(--paper);
+  background: linear-gradient(var(--amber), var(--amber)) no-repeat 0 100% / 0 1px;
+  border: 0;
+  border-bottom: 1px solid rgba(236, 235, 230, 0.26);
+  padding: 12px 0 12px;
+  border-radius: 0;
+  transition: background-size 0.6s var(--ease), border-color 0.3s;
+  resize: vertical;
+}
+.field textarea { min-height: 112px; line-height: 1.55; }
+.field input::placeholder,
+.field textarea::placeholder { color: rgba(236, 235, 230, 0.34); }
+.field input:focus,
+.field textarea:focus { outline: none; background-size: 100% 1px; }
+.field input:focus-visible,
+.field textarea:focus-visible { outline: none; }
+.field [aria-invalid='true'] { border-bottom-color: #e07a62; background-image: linear-gradient(#e07a62, #e07a62); }
+.field__err { margin: 0; min-height: 1.2em; font-size: 13px; color: #f0a08c; }
+
+/* service chips: a segmented control, three equal strips */
+.choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 4px; }
+.choices label { position: relative; display: block; cursor: pointer; letter-spacing: 0.02em; text-transform: none; font-size: 14px; font-weight: 500; color: var(--mute); }
+.choices input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.choices span { display: grid; place-items: center; min-height: 48px; padding: 8px 12px; text-align: center; line-height: 1.25; border-radius: 14px; border: 1px solid rgba(236, 235, 230, 0.2); background: rgba(236, 235, 230, 0.02); transition: border-color 0.35s, color 0.35s, background 0.35s, transform 0.4s var(--ease); }
+.choices label:hover span { border-color: rgba(220, 170, 104, 0.6); color: var(--paper); transform: translateY(-1px); }
+.choices input:checked + span { border-color: var(--amber); color: var(--paper); background: linear-gradient(160deg, rgba(220, 170, 104, 0.22), rgba(220, 170, 104, 0.06)); box-shadow: inset 0 0 0 1px rgba(220, 170, 104, 0.35), 0 8px 24px -12px rgba(220, 170, 104, 0.6); }
+.choices input:focus-visible + span { outline: 1px solid var(--amber); outline-offset: 3px; }
+.field--choice.is-invalid .choices span { border-color: rgba(224, 122, 98, 0.65); }
+
+.hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.form__foot { display: flex; align-items: center; gap: 12px 22px; flex-wrap: wrap; padding-top: 4px; }
+.form .btn { min-height: 52px; padding: 16px 30px; background: linear-gradient(180deg, #f3dcb8, var(--amber)); color: #1a1208; }
+.form .btn:hover { background: linear-gradient(180deg, #f9e8cb, #e6b878); }
+.form .btn svg { transition: transform 0.4s var(--ease); }
+.form .btn:hover svg { transform: translateX(3px); }
+.form .btn[disabled] { opacity: 0.6; cursor: progress; }
+.form__status { margin: 0; font-size: 15px; line-height: 1.45; color: var(--mute); flex: 1 1 200px; min-width: 0; }
+.form__status.is-ok { color: #cfe3c2; }
+.form__status.is-err { color: #f0a08c; }
+
+/* ------------------------------------------------------ the confirmation */
+.pass__done { display: grid; align-content: center; justify-items: start; gap: 0; padding: clamp(30px, 4vw, 46px) var(--pad) clamp(30px, 4vw, 44px); }
+.seal { width: 56px; height: 56px; margin-bottom: 22px; fill: none; stroke: var(--amber); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.seal circle { stroke-dasharray: 132; stroke-dashoffset: 132; }
+.seal path { stroke-dasharray: 34; stroke-dashoffset: 34; }
+.pass.is-sent .seal circle { animation: seal-draw 1.4s var(--ease) 0.5s forwards; }
+.pass.is-sent .seal path { animation: seal-draw 0.8s var(--ease) 1.5s forwards; }
+@keyframes seal-draw { to { stroke-dashoffset: 0; } }
+.pass__done .eyebrow { margin-bottom: 12px; }
+.pass__thanks { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(2.2rem, 3.6vw, 3.1rem); line-height: 1.02; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.pass__thanks:focus { outline: none; }
+.pass__thanks em { font-style: italic; color: #f3dcb8; }
+.pass__note { margin: 16px 0 0; max-width: 28rem; font-size: 15.5px; line-height: 1.65; color: var(--mute); }
+.pass__sum { display: grid; gap: 0; width: 100%; margin: 28px 0 0; border-top: 1px dashed rgba(236, 235, 230, 0.26); }
+.pass__sum > div { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 14px; align-items: baseline; padding: 14px 0; border-bottom: 1px dashed rgba(236, 235, 230, 0.16); }
+.pass__sum dt { font-size: 12px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
+.pass__sum dd { margin: 0; font-size: 16px; color: var(--paper); overflow-wrap: anywhere; }
+.pass__again { margin-top: 26px; min-height: 48px; padding: 14px 24px; }
+
+/* ----------------------------------------------------------------- responsive */
+@media (max-width: 1080px) {
+  .contact__inner { grid-template-columns: minmax(0, 1fr); align-items: start; gap: 48px; }
+  .contact__card { justify-self: stretch; max-width: 680px; }
+  .contact::before { background: linear-gradient(to bottom, rgba(6, 7, 9, 0.8), rgba(6, 7, 9, 0.5) 60%, rgba(6, 7, 9, 0.7)); }
+}
+@media (max-width: 760px) {
+  .contact { padding-top: 88px; padding-bottom: 72px; }
+  .contact__intro .display { font-size: clamp(2.6rem, 12.5vw, 3.6rem); }
+  .route { margin-top: 26px; }
+  .route li { padding-bottom: 16px; }
+  .route li:not(:last-child) span { display: none; }
+  .route li:not(:last-child)::after { bottom: 0; }
+  .pass { --head: 58px; --notch: 9px; }
+  .pass__kind > span { display: none; }
+  .pass__title,
+  .pass__kind { letter-spacing: 0.2em; }
+  .form { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .choices { gap: 8px; }
+  .choices span { padding: 8px 6px; font-size: 13.5px; }
+  .field__hint { min-height: 0; }
+  .form__foot .btn { width: 100%; justify-content: center; }
+  .pass__sum > div { grid-template-columns: 1fr; gap: 4px; }
+}
+
+/* motion off: still, but fully present */
+.rm .contact__bg { animation: none; transform: scale(1.04); }
+.rm .contact .rv,
+.rm .pass__stage > *,
+.rm .choices span,
+.rm .field input,
+.rm .field textarea { transition-duration: 0.01s !important; transition-delay: 0s !important; }
+.rm .contact.reveal-ready .rv { opacity: 1; transform: none; }
+.rm .seal circle,
+.rm .seal path { animation: none !important; stroke-dashoffset: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .contact__bg { animation: none; transform: scale(1.04); }
+  .contact.reveal-ready .rv { opacity: 1; transform: none; }
+  .contact .rv,
+  .pass__stage > *,
+  .choices span { transition-duration: 0.01s !important; transition-delay: 0s !important; }
+  .seal circle,
+  .seal path { animation: none !important; stroke-dashoffset: 0; }
+}

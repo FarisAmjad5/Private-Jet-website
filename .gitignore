@@ -1,0 +1,16 @@
+# Private-Jet repo: the OBSIDIAN site (jet/) and what it needs to run and re-render.
+node_modules/
+data/
+/media/
+scripts/_bak/
+.claude/
+.impeccable/
+
+# The HALCYON property site shares this local folder but isn't part of this repo.
+/index.html
+/README.md
+/css/
+/js/
+/studio/index.html
+/studio/scenes.js
+/scripts/build-media.mjs

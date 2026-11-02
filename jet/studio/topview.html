@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Top view check</title>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+} }
+</script></head>
+<body style="margin:0;background:#111">
+<script type="module">
+// Offscreen replica of initTopView() in jet/site.js (same lights, env tilt, camera). ?save=<name>&shown=0.5&w=1100&h=760
+import { THREE, createJet, createEnvironment, addLights } from '../js/jet-model.js';
+const q = new URLSearchParams(location.search);
+const st = (window.__top = { done: false, error: null });
+(async () => {
+  const w = Number(q.get('w') || 1100), h = Number(q.get('h') || 760), shown = Number(q.get('shown') || 0.5);
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+  renderer.setSize(w, h, false);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+  const scene = new THREE.Scene();
+  createEnvironment(renderer, scene, { background: false, w: 1024, h: 512 });
+  scene.environmentRotation.set(Math.PI / 2.4, 0, 0);
+  const { key } = addLights(scene);
+  key.intensity = 3.2;
+  const over = new THREE.DirectionalLight(0xdfe4ef, 1.1);
+  over.position.set(-20, 80, 30);
+  scene.add(over);
+  const jet = createJet('umbra');
+  scene.add(jet);
+  const camera = new THREE.PerspectiveCamera(30, w / h, 1, 400);
+  camera.up.set(-1, 0, 0);
+  const fov = THREE.MathUtils.degToRad(camera.fov);
+  const distW = (30 / 2 / Math.tan(fov / 2)) / camera.aspect * 1.25;
+  const dist = Math.max(distW, 58);
+  const halfH = Math.tan(fov / 2) * dist;
+  const travel = Math.max(0, halfH - 17);
+  const x = THREE.MathUtils.lerp(-travel, travel, shown);
+  jet.position.set(x, 0, 0);
+  jet.rotation.x = Math.sin(shown * Math.PI * 2) * 0.09;
+  jet.rotation.y = (shown - 0.5) * 0.14;
+  const az = THREE.MathUtils.lerp(0.9, -0.4, shown);
+  key.position.set(Math.cos(az) * 100, 40, Math.sin(az) * 100);
+  camera.position.set(x * 0.25 + (shown - 0.5) * 10, dist, (shown - 0.5) * -6);
+  camera.lookAt(x * 0.25, 0, 0);
+  renderer.render(scene, camera);
+  document.body.appendChild(renderer.domElement);
+  if (q.get('save')) {
+    const blob = await new Promise((r) => renderer.domElement.toBlob(r, 'image/png'));
+    const r = await fetch('/__capture?f=' + encodeURIComponent('media/_preview/' + q.get('save') + '.png'), { method: 'POST', body: blob });
+    if (!r.ok) throw new Error('capture ' + r.status);
+  }
+  st.done = true;
+})().catch((e) => { st.error = String(e.stack || e); });
+</script></body></html>
