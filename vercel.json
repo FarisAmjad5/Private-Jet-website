@@ -1,4 +1,6 @@
 {
-  "trailingSlash": true,
-  "redirects": [{ "source": "/", "destination": "/jet/", "permanent": false }]
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "",
+  "outputDirectory": "jet"
 }

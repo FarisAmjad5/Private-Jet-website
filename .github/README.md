@@ -19,7 +19,7 @@ The contact form posts to `/api/enquiry` on this server; submissions are saved t
 
 ## Contact form on Vercel
 
-On Vercel `server.js` doesn't run, so the form is handled by the serverless function `api/enquiry.js`, which validates the submission (same rules as `server.js`, shared in `lib/enquiry.js`) and emails it to you through [Resend](https://resend.com)'s HTTP API. No npm dependencies.
+`vercel.json` deploys `jet/` as a static site at the domain root (framework "Other", so Vercel doesn't mistake `server.js` for a backend). On Vercel `server.js` doesn't run, so the form is handled by the serverless function `api/enquiry.js`, which validates the submission (same rules as `server.js`, shared in `lib/enquiry.js`) and emails it to you through [Resend](https://resend.com)'s HTTP API. No npm dependencies.
 
 1. Create a free Resend account and create an API key (Resend dashboard → API Keys).
 2. In Vercel → your project → Settings → Environment Variables, add:
