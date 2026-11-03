@@ -4,6 +4,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const { validate } = require('./lib/enquiry');
 
 const ROOT = __dirname;
 const PORT = Number(process.env.PORT) || 4173;
@@ -47,9 +48,7 @@ function capture(req, res, url) {
 
 // POST /api/enquiry — validates an OBSIDIAN contact-form submission and appends it to data/enquiries.jsonl.
 // Replies 201 { ok: true } only once the line is on disk, so the page never shows a false success.
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const INTERESTS = ['Charter', 'Ownership', 'General Inquiry'];
-
+// Validation lives in lib/enquiry.js so the Vercel function (api/enquiry.js) applies the same rules.
 function enquiry(req, res) {
   const reply = (code, body) => res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }).end(JSON.stringify(body));
   let raw = '';
@@ -70,18 +69,10 @@ function enquiry(req, res) {
     } catch {
       return reply(400, { ok: false, error: 'invalid JSON' });
     }
-    const str = (v) => (typeof v === 'string' ? v.trim() : '');
-    const name = str(d.name);
-    const email = str(d.email);
-    const interest = str(d.interest);
-    const message = str(d.message);
-    const errors = {};
-    if (name.length < 2 || name.length > 120) errors.name = 'Please tell us your name.';
-    if (!EMAIL.test(email) || email.length > 200) errors.email = 'Please enter a valid email address.';
-    if (!INTERESTS.includes(interest)) errors.interest = 'Please choose Charter, Ownership or General Inquiry.';
-    if (message.length < 10 || message.length > 4000) errors.message = 'A few words about your plans, please (at least 10 characters).';
-    if (Object.keys(errors).length) return reply(400, { ok: false, errors });
-    if (str(d.company)) return reply(201, { ok: true }); // honeypot filled: accept quietly, store nothing
+    const v = validate(d);
+    if (v.errors) return reply(400, { ok: false, errors: v.errors });
+    if (v.spam) return reply(201, { ok: true }); // honeypot filled: accept quietly, store nothing
+    const { name, email, interest, message } = v.data;
     const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
     const line = JSON.stringify({ id, at: new Date().toISOString(), name, email, interest, message }) + '\n';
     const dir = path.join(ROOT, 'data');

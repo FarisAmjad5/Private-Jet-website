@@ -12,7 +12,7 @@ npm start
 
 Open http://localhost:4173/jet/ (run from the project root).
 
-The enquiry form needs this Node server. A static host will serve the page fine, but `POST /api/enquiry` will 404 and the form will show its "couldn't send" message. Submissions are validated server-side and appended, one JSON object per line, to `data/enquiries.jsonl` (created on first submit; it is git-ignored).
+The enquiry form needs a backend for `POST /api/enquiry`. Locally that is this Node server: submissions are validated server-side and appended, one JSON object per line, to `data/enquiries.jsonl` (created on first submit; it is git-ignored). On Vercel the serverless function `api/enquiry.js` does it instead, emailing each enquiry to the site owner through Resend; set `RESEND_API_KEY` and `ENQUIRY_TO` (and optionally `ENQUIRY_FROM`) in the project's environment variables and redeploy. With the default `onboarding@resend.dev` sender, Resend only delivers to the address the Resend account was signed up with, so `ENQUIRY_TO` must be that address unless you verify a domain. A plain static host with neither will 404 and the form will show its "couldn't send" message. Both backends share the validation in `lib/enquiry.js`.
 
 ## File map
 
@@ -30,6 +30,8 @@ The enquiry form needs this Node server. A static host will serve the page fine,
 | `jet/studio/` | Render studio that produces the loop frames |
 | `scripts/build-jet-media.mjs` | Encoder (`npm run jet-media`) |
 | `server.js` | Static server (HTTP Range supported) + `POST /api/enquiry` |
+| `api/enquiry.js` | Vercel serverless function: the same endpoint, emailing via Resend |
+| `lib/enquiry.js` | Enquiry validation shared by `server.js` and `api/enquiry.js` |
 
 ## Loops
 
